@@ -1,0 +1,37 @@
+
+#include <SoftwareSerial.h>
+#include <Wire.h>
+
+int LED = 4;
+SoftwareSerial I2CBT(10,11); //定義Arduino PIN10及PIN11分別為RX及TX腳位
+//請注意Arduino的TX要接藍牙模組的RX, 反之亦然
+
+void setup() {
+  Serial.begin(9600);
+  I2CBT.begin(38400);//bluetooth baud rate  
+  pinMode(LED, OUTPUT);    
+}
+
+void loop() {
+  byte cmmd[20];
+  int insize;
+  while(1){
+    //read message from bluetooth
+    if ((insize=(I2CBT.available()))>0){
+      Serial.print("input size = "); 
+      Serial.println(insize);
+      for (int i=0; i<insize; i++){
+        Serial.print(cmmd[i]=char(I2CBT.read()));
+        Serial.print("\n"); 
+      }
+    }
+    //根據所收到訊號執行對應動作  
+    if(insize==1)
+    
+      digitalWrite(LED,LOW);
+      
+    else if(insize==2)
+      digitalWrite(LED,HIGH);
+
+    } //Switch
+  } //while
